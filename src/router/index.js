@@ -5,7 +5,24 @@ import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
-const routes = [
+let routes = []
+
+const requireContext = require.context(
+  './',
+  true,
+  /\.js$/
+)
+requireContext.keys().forEach(filename => {
+  if (filename === './index.js') return
+  const routerModule = requireContext(filename)
+  routes = [...routes, ...(routerModule.default || routerModule)]
+})
+
+const router = new VueRouter({
+  routes
+})
+
+router.addRoutes([
   {
     path: '/',
     name: 'Home',
@@ -19,11 +36,7 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   }
-]
-
-const router = new VueRouter({
-  routes
-})
+])
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
