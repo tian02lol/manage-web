@@ -1,205 +1,76 @@
 <template>
-    <div>
-        <el-container class="main">
-            <el-aside :width="tabWidth+'px'">
-                <div>
-                    <div class="isClossTab" @click="isClossTabFun">
-                        <i :class="isCollapse?'el-icon-d-arrow-right':'el-icon-d-arrow-left'" ></i>
+    <div class="wrapper">
+        <v-head></v-head>
+        <v-sidebar></v-sidebar>
+        <div class="content-box" :class="{'content-collapse':collapse}">
+            <div class="content_wrapper">
+                <div class="content" style="flex:1;">
+                    <div class="content_inner">
+                        <transition name="move" mode="out-in">
+                        <keep-alive :include="tagsList">
+                            <router-view></router-view>
+                        </keep-alive>
+                    </transition>
                     </div>
-                    <el-menu :class="'menu'"
-                             default-active="1-4-1"
-                             class="el-menu-vertical-demo"
-                             @open="handleOpen"
-                             @close="handleClose"
-                             :collapse="isCollapse"
-                             background-color="#545c64"
-                             text-color="#fff"
-                             active-text-color="#ffd04b"
-                    >
-                        <el-submenu index="1">
-                            <template slot="title">
-                                <i class="el-icon-location"></i>
-                                <span slot="title">导航一</span>
-                            </template>
-                            <el-menu-item-group>
-                                <span slot="title">分组一</span>
-                                <el-menu-item index="1-1">选项1</el-menu-item>
-                                <el-menu-item index="1-2">选项2</el-menu-item>
-                            </el-menu-item-group>
-                            <el-menu-item-group title="分组2">
-                                <el-menu-item index="1-3">选项3</el-menu-item>
-                            </el-menu-item-group>
-                            <el-submenu index="1-4">
-                                <span slot="title">选项4</span>
-                                <el-menu-item index="1-4-1">选项1</el-menu-item>
-                            </el-submenu>
-                        </el-submenu>
-                        <el-menu-item index="2">
-                            <i class="el-icon-menu"></i>
-                            <span slot="title">导航二</span>
-                        </el-menu-item>
-                        <el-menu-item index="3">
-                            <i class="el-icon-setting"></i>
-                            <span slot="title">导航三</span>
-                        </el-menu-item>
-                    </el-menu>
                 </div>
-            </el-aside>
-            <el-container>
-                <el-header class="main-header">
-                    <el-dropdown @command="handleClick">
-                        <span class="el-dropdown-link">
-                            <img src="" alt="">
-                        </span>
-                        <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item>退出登录</el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
-                </el-header>
-                <el-main>
-                    <el-breadcrumb separator="/" class="crumbs">
-                        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                        <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-                        <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-                        <el-breadcrumb-item>活动详情</el-breadcrumb-item>
-                    </el-breadcrumb>
-                    <div>
-                        <router-view></router-view>
-                    </div>
-                </el-main>
-                <el-footer class="main-footer" height="50px">
-                    <p>页脚</p>
-                </el-footer>
-            </el-container>
-        </el-container>
+            </div>
+
+        </div>
     </div>
 </template>
-<style>
-    *{
-        padding: 0;
-        margin: 0;
+<style lang="scss" scoped>
+    .content_wrapper{
+       display: flex;
+       flex-direction: column;
+       height:100%;
+       .content_inner{
+        //    background: #fff;
+           height: 100%;
+       }
     }
-
-</style>
-<style scoped lang="scss">
-    $header-height:60px;
-    $background-color: #545c64;
-    $color: #FFF;
-
-    .main{
-        height: 100vh;
-        min-width: 800px;
-        min-height: 600px;
-        overflow: hidden;
-
-        aside{
-            overflow: visible;
-            height: 100%;
-            background-color: $background-color;
-            color: $color;
-
-            .isClossTab{
-                width: 100%;
-                height: $header-height;
-                cursor: pointer;
-                font-size: 25px;
-                text-align: center;
-                line-height: $header-height;
-                font-weight: bold;
-                border-right: 1px solid #807c7c;
-                box-sizing: border-box;
-            }
-            .menu {
-                width: 100%;
-                border-right:0;
-            }
-
-        }
-
-        .main-header {
-            background-color: $background-color;
-            color: $color;
-
-            .el-dropdown{
-                cursor: pointer;
-                float: right;
-            }
-            .el-dropdown-link{
-
-                img{
-                    $imgMargin: (($header-height - 50)/2);
-                    display:inline-block;
-                    width:50px;
-                    height: 50px;
-                    border-radius: 25px;
-                    background-color: #FFF;
-                    margin-top: $imgMargin;
-                }
-            }
-        }
-
-        .crumbs {
-            margin-bottom: 20px;
-        }
-
-        .main-footer{
-            text-align: center;
-            background-color: $background-color;
-            color: $color;
-            line-height: 50px;
-        }
-
+    .content-box {
+      position: absolute;
+      left: 250px;
+      right: 0;
+      top: 70px;
+      bottom: 0;
+      overflow-y: scroll;
+      transition: left .3s ease-in-out;
+      background: #f0f0f0;
+  }
+  .content-collapse{
+      left: 65px;
     }
-
 </style>
-
 <script>
+import vHead from './Header.vue'
+import vSidebar from './Sidebar.vue'
+import bus from './bus'
 export default {
   data () {
     return {
-      isCollapse: false,
-      tabWidth: 200,
-      test1: 1,
-      intelval: null
+      tagsList: [],
+      collapse: false
     }
   },
+  components: {
+    vHead, vSidebar
+  },
   methods: {
-    handleOpen (key, keyPath) {
-      console.log(key, keyPath)
-    },
-    handleClose (key, keyPath) {
-      console.log(key, keyPath)
-    },
-    isClossTabFun () {
-      clearInterval(this.intelval)
-      if (!this.isCollapse) {
-        this.intelval = setInterval(() => {
-          if (this.tabWidth <= 64) {
-            clearInterval(this.intelval)
-            this.tabWidth -= 1
-          }
-        }, 1)
-      } else {
-        this.tabWidth = 200
+  },
+  created () {
+    bus.$on('collapse', msg => {
+      this.collapse = msg
+    })
+
+    // 只有在标签页列表里的页面才使用keep-alive，即关闭标签之后就不保存到内存中了。
+    bus.$on('tags', msg => {
+      var arr = []
+      for (let i = 0, len = msg.length; i < len; i++) {
+        msg[i].name && arr.push(msg[i].name)
       }
-      this.isCollapse = !this.isCollapse
-    },
-    handleClick: function () {
-      this.$confirm('确认退出登录?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        localStorage.removeItem('token')
-        this.$router.push('/login')
-        this.$notify({
-          title: '成功',
-          message: '已退出登录',
-          type: 'success'
-        })
-      }).catch(() => {
-      })
-    }
+      this.tagsList = arr
+    })
   }
 }
 </script>
