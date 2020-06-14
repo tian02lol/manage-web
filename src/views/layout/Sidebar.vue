@@ -1,6 +1,6 @@
 <template>
     <div class="sidebar">
-        <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#324157"
+        <el-menu class="sidebar-el-menu" :default-active="$route.path" :collapse="collapse" background-color="#324157"
             text-color="#bfcbd9" active-text-color="#20a0ff" unique-opened router>
            <template v-for="(item,i) in items">
                 <template v-if="item.subs&&item.subs.length">
@@ -36,7 +36,7 @@ export default {
           title: '基础模块',
           subs: [
             {
-              index: 'home/user',
+              index: '/home/user',
               title: '用户管理'
             }
           ]
@@ -119,9 +119,9 @@ export default {
     }
   },
   computed: {
-    routes () {
-      return 
-    },
+    // routes () {
+    //   return
+    // },
     onRoutes () {
       return this.$route.path.replace('/', '')
     }
