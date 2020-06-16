@@ -24,23 +24,26 @@
                     <span class="btn-bell-badge" v-if="message"></span>
                 </div>
                 <!-- 用户头像 -->
-                <div class="user-avator"><img src="../../assets/images/touxiang.jpg"></div>
+                <div class="user-avator"><img :src="'api'+user.userIcon"></div>
                 <!-- 用户名下拉菜单 -->
                 <el-dropdown class="user-name" trigger="click" @command="handleCommand">
                     <span class="el-dropdown-link">
                         {{user.userName}} <i class="el-icon-caret-bottom"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item divided  command="info">个人信息</el-dropdown-item>
                         <el-dropdown-item divided  command="loginout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </div>
         </div>
+        <userInfo :info='user' :visible.sync="visible"></userInfo>
     </div>
 </template>
 <script>
 import bus from './bus'
 import request from '@/utils/request'
+import userInfo from './info'
 export default {
   data () {
     return {
@@ -49,8 +52,12 @@ export default {
       name: 'merciqiao',
       lev: '青铜级',
       message: 2,
-      user: {}
+      user: {},
+      visible: false
     }
+  },
+  components: {
+    userInfo
   },
   computed: {
     // username () {
@@ -99,8 +106,8 @@ export default {
     handleCommand (command) {
       if (command === 'loginout') {
         this.loginout()
-      } else if (command === 'changeZh') {
-        this.$i18n.locale = 'zh_CN'
+      } else if (command === 'info') {
+        this.visible = true
       } else if (command === 'changeEn') {
         this.$i18n.locale = 'en_US'
       }

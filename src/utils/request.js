@@ -19,9 +19,11 @@ const request = axios.create({
 request.interceptors.request.use(
   config => {
     config.headers.token = store.state.token
-    config.data = Qs.stringify(config.data, {
-      allowDots: true
-    })
+    if (config.method === 'post' && config.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
+      config.data = Qs.stringify(config.data, {
+        allowDots: true
+      })
+    }
     NProgress.start()
     return config
   },
