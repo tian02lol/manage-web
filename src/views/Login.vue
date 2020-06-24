@@ -1,6 +1,6 @@
 <template>
   <div class="login_wrapper">
-        <div class="login">
+        <div class="login" @keydown.13='login'>
             <el-form :model="loginForm" ref="loginForm" :rules="loginRules">
                 <el-form-item>
                     <h2 class="title">后台管理系统</h2>
