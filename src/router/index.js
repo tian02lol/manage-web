@@ -35,12 +35,12 @@ router.addRoutes([
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-    path: '/home',
+    path: '/',
     name: 'home',
     component: () => import('../views/layout/home.vue'),
     children: [
       {
-        path: '/home/user',
+        path: '/user',
         name: 'user',
         component: () => import('../views/user/index.vue')
       }

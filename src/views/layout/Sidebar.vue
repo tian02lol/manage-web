@@ -36,7 +36,7 @@ export default {
           title: '基础模块',
           subs: [
             {
-              index: '/home/user',
+              index: '/user',
               title: '用户管理'
             }
           ]

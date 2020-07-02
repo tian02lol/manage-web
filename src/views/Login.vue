@@ -53,7 +53,7 @@ export default {
                 type: 'success'
               })
               store.commit('changeLogin', res.data)
-              that.$router.push('/home')
+              that.$router.push('/')
             } else {
               that.$notify.error({
                 title: '失败',
